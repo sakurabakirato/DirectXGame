@@ -5,20 +5,26 @@ using namespace KamataEngine;
 GameScene::~GameScene() 
 { 
 	delete model_; 
+	delete player_;
 }
 
-void GameScene::Intialize() { 
-	textureManager_ = TextureManager::Load("player_4.png"); 
+void GameScene::Intialize() 
+{
+	textureHandle_ = TextureManager::Load("player_4.png");
 
 	model_ = Model::Create();
 
 	worldTransform_.Initialize();
 	camera_.Initialize();
+
+	player_ = new Player();
+
+	player_->Initialize(model_, textureHandle_, &camera_);
 }
 
 void GameScene::Update() 
-{
-
+{ 
+	player_->Update(); 
 }
 
 void GameScene::Draw() 
@@ -27,7 +33,7 @@ void GameScene::Draw()
 
 	Model::PreDraw(dxCommon->GetCommandList());
 
-	model_->Draw(worldTransform_, camera_, textureManager_);
+	player_->Draw();
 
 	Model::PostDraw();
 }
