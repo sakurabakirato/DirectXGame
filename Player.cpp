@@ -22,12 +22,6 @@ void Player::Update() {
 
 void Player::Draw() 
 {
-	DirectXCommon* dxCommon = DirectXCommon::GetInstance();
-
-	Model::PreDraw(dxCommon->GetCommandList());
-
 	model_->Draw(worldTransform_, *camera_, textureHandle_);
-
-	Model::PostDraw();
 }
 

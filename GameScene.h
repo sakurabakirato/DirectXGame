@@ -1,6 +1,8 @@
 #pragma once
 #include <KamataEngine.h>
 #include "Player.h"
+#include <vector>
+#include "MyMath.h"
 
 
 class GameScene 
@@ -19,10 +21,19 @@ private:
 
 	KamataEngine::Model* model_ = nullptr;
 
-	KamataEngine::WorldTransform worldTransform_;
+	KamataEngine::Model* modelBlock_ = nullptr;
 
 	KamataEngine::Camera camera_;
 
 	Player* player_ = nullptr;
+
+	std::vector<std::vector<KamataEngine::WorldTransform*>> worldTransformBlocks_;
+
+	//デバックカメラ有効
+	bool isDebugCameraActive_ = false;
+
+	//デバックカメラ
+	KamataEngine::DebugCamera* debugCamera_ = nullptr;
+
 
 };
