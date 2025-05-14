@@ -17,8 +17,10 @@ void Player::Initialize(Model* model, uint32_t textureHandle, Camera* camera)
 	camera_ = camera;
 }
 
-void Player::Update() { 
-	worldTransform_.TransferMatrix(); }
+void Player::Update() 
+{ 
+	worldTransform_.TransferMatrix(); 
+}
 
 void Player::Draw() 
 {

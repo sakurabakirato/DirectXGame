@@ -1,19 +1,18 @@
 #pragma once
-#include <KamataEngine.h>
-#include "Player.h"
-#include <vector>
 #include "MyMath.h"
+#include "Player.h"
+#include "SkyDome.h"
+#include <KamataEngine.h>
+#include <vector>
 
-
-class GameScene 
-{
+class GameScene {
 public:
 	~GameScene();
-	//初期化
+	// 初期化
 	void Intialize();
-	//更新
+	// 更新
 	void Update();
-	//描画
+	// 描画
 	void Draw();
 
 private:
@@ -27,13 +26,15 @@ private:
 
 	Player* player_ = nullptr;
 
+	SkyDome* skydome_ = nullptr;
+
+	KamataEngine::Model* modelSkydome_ = nullptr;
+
 	std::vector<std::vector<KamataEngine::WorldTransform*>> worldTransformBlocks_;
 
-	//デバックカメラ有効
+	// デバックカメラ有効
 	bool isDebugCameraActive_ = false;
 
-	//デバックカメラ
+	// デバックカメラ
 	KamataEngine::DebugCamera* debugCamera_ = nullptr;
-
-
 };
