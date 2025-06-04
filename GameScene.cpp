@@ -10,6 +10,7 @@ GameScene::~GameScene()
 	delete debugCamera_;
 	delete modelSkydome_;
 	delete mapChipField_;
+	delete cameraController_;
 
 	for (std::vector<WorldTransform*>& worldTransformBlockLine : worldTransformBlocks_) 
 	{
@@ -33,8 +34,6 @@ void GameScene::Intialize() {
 
 	Vector3 playerPosition = mapChipField_->GetMapChipPositionByIndex(1,18);
 
-
-
 	camera_.Initialize();
 
 	// デバックカメラの生成
@@ -53,6 +52,16 @@ void GameScene::Intialize() {
 	skydome_->Initialize(modelSkydome_, textureHandle_, &camera_);
 
 	player_->Initialize(modelPlayer_, &camera_, playerPosition);
+
+	//カメラコントローラの初期化
+	cameraController_ = new CameraController();
+	cameraController_->Initialize();
+	cameraController_->SetTarget(player_);
+	cameraController_->Reset();
+
+	CameraController::Rect cameraArea = {12.0f, 100 - 12.0f, 6.0f, 6.0f};
+	cameraController_->SetMovebleArea(cameraArea);
+
 }
 
 void GameScene::Update() 
@@ -60,6 +69,7 @@ void GameScene::Update()
 	player_->Update();
 	skydome_->Update();
 	debugCamera_->Update();
+	cameraController_->Update();
 
 #ifdef _DEBUG
 	if (Input::GetInstance()->TriggerKey(DIK_0)) 
@@ -81,8 +91,11 @@ void GameScene::Update()
 	} 
 	else 
 	{
+		camera_.matView = cameraController_->GetViewProjection().matView;
+		camera_.matProjection = cameraController_->GetViewProjection().matProjection;
+
 		// ビュープロジェクション行列の更新と転送
-		camera_.UpdateMatrix();
+		camera_.TransferMatrix();
 	}
 
 	for (std::vector<WorldTransform*>& worldTransformBlockLine : worldTransformBlocks_) 
