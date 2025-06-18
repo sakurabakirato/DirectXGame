@@ -35,5 +35,22 @@ public:
 	uint32_t GetNumBlockVirtical() const { return kNumBlockVirtical; }
 	uint32_t GetNumBlockHorizontal() const { return kNumBlockHorizontal; }
 
+	struct IndexSet 
+	{
+		uint32_t xIndex;
+		uint32_t yindex;
+	};
+
+	IndexSet GetMapChipIndexSetByPosition(const Vector3& position);
+
+	struct Rect 
+	{
+		float left;
+		float right;
+		float bottom;
+		float top;
+	};
+
+	Rect GetRectByIndex(uint32_t xIndex, uint32_t yIndex);
 
 };

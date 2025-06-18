@@ -1,11 +1,17 @@
 #pragma once
 #include <KamataEngine.h>
 
+class MapChipField;
+
 class Player {
 public:
 	void Initialize(KamataEngine::Model* model, KamataEngine::Camera* camera, const KamataEngine::Vector3 & position);
 
 	void Update();
+
+	void InputMove();
+
+	void AnimateTurn();
 
 	void Draw();
 
@@ -15,10 +21,40 @@ public:
 		kLeft,
 	};
 
+	struct CollisionMapInfo 
+	{
+		bool ceiling = false;
+		bool landing = false;
+		bool hitWall = false;
+		KamataEngine::Vector3 move;
+	};
+
+	enum Corner 
+	{
+		kRightBottom,
+		kLeftBottom,
+		kRightTop,
+		kLeftTop,
+
+		kNumCorner
+
+	};
+
+	void CheckMapCollision(CollisionMapInfo& info);
+
+	void CheckMapCollisionUp(CollisionMapInfo& info);
+
+	KamataEngine::Vector3 CornerPosition(const KamataEngine::Vector3& center, Corner corner);
+
 	const KamataEngine::WorldTransform& GetWorldTransform() const { return worldTransform_; }
 
 	const KamataEngine::Vector3& GetVelocity() const { return velocity_; }
 
+	void SetMapChipField(MapChipField* mapChipField) { mapChipField; }
+
+	void CheckMapMove(const CollisionMapInfo& info);
+
+	void CheckMapCeiling(const CollisionMapInfo& info);
 
 private:
 
@@ -53,5 +89,12 @@ private:
 	static inline const float kLimitFallSpeed = 2;
 
 	static inline const float kJumpAccleration = 1.0f;
+
+	MapChipField* mapChipField_ = nullptr;
+
+	static inline const float kWidth = 0.8f;
+	static inline const float kHeight = 0.8f;
+
+	static inline const float kBlank = 1.0f;
 
 };

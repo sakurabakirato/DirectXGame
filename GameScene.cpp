@@ -39,19 +39,22 @@ void GameScene::Intialize() {
 	// デバックカメラの生成
 	debugCamera_ = new DebugCamera(1280, 720);
 
-	player_ = new Player();
-
 	skydome_ = new SkyDome();
 
 	mapChipField_ = new MapChipField;
 
 	mapChipField_->LoadMapChipCsv("Resources/blocks.csv");
 
+	player_ = new Player();
+
+	player_->Initialize(modelPlayer_, &camera_, playerPosition);
+
+	player_->SetMapChipField(mapChipField_);
+
 	GenerateBlocks();
 
 	skydome_->Initialize(modelSkydome_, textureHandle_, &camera_);
 
-	player_->Initialize(modelPlayer_, &camera_, playerPosition);
 
 	//カメラコントローラの初期化
 	cameraController_ = new CameraController();
