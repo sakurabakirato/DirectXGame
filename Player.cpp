@@ -15,6 +15,7 @@ void Player::Initialize(KamataEngine::Model* model, KamataEngine::Camera* camera
 
 	model_ = model;
 
+
 	worldTransform_.Initialize();
 	worldTransform_.translation_ = position;
 

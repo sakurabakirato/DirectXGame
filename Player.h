@@ -50,7 +50,7 @@ public:
 
 	const KamataEngine::Vector3& GetVelocity() const { return velocity_; }
 
-	void SetMapChipField(MapChipField* mapChipField) { mapChipField; }
+	void SetMapChipField(MapChipField* mapChipField) { mapChipField_ = mapChipField; }
 
 	void CheckMapMove(const CollisionMapInfo& info);
 
