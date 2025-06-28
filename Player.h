@@ -44,6 +44,12 @@ public:
 
 	void CheckMapCollisionUp(CollisionMapInfo& info);
 
+	void CheckMapCollisionDown(CollisionMapInfo& info);
+
+	void CheckMapCollisionRight(CollisionMapInfo& info);
+
+	void CheckMapCollisionLeft(CollisionMapInfo& info);
+
 	KamataEngine::Vector3 CornerPosition(const KamataEngine::Vector3& center, Corner corner);
 
 	const KamataEngine::WorldTransform& GetWorldTransform() const { return worldTransform_; }
@@ -55,6 +61,10 @@ public:
 	void CheckMapMove(const CollisionMapInfo& info);
 
 	void CheckMapCeiling(const CollisionMapInfo& info);
+
+	void CheckMapWall(const CollisionMapInfo& info);
+
+	void CheckMapLanding(const CollisionMapInfo& info);
 
 private:
 
@@ -72,7 +82,7 @@ private:
 
 	static inline const float kAttenuation = 0.1f;
 
-	static inline const float kLimitRunSpeed = 2;
+	static inline const float kLimitRunSpeed = 1.0f;
 
 	LRDirection lrDirection_ = LRDirection::kRight;
 
@@ -86,7 +96,7 @@ private:
 
 	static inline const float kGravityAcceleration = 0.1f;
 
-	static inline const float kLimitFallSpeed = 2;
+	static inline const float kLimitFallSpeed = 1.0f;
 
 	static inline const float kJumpAccleration = 1.0f;
 
@@ -96,5 +106,9 @@ private:
 	static inline const float kHeight = 0.8f;
 
 	static inline const float kBlank = 1.0f;
+
+	static inline const float kAttenuationLanding = 0.5f;
+	static inline const float kGroundSearchHeight = 0.1f;
+	static inline const float kAttenuationWall = 0.5f;
 
 };
