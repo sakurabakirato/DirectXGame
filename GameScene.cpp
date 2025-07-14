@@ -7,6 +7,7 @@ GameScene::~GameScene()
 	// デストラクタ
 	delete model_;
 	delete player_;
+	delete enemy_;
 	delete debugCamera_;
 	delete modelSkydome_;
 	delete mapChipField_;
@@ -30,6 +31,8 @@ void GameScene::Intialize() {
 
 	modelPlayer_ = Model::CreateFromOBJ("player");
 
+	modelEnemy_ = Model::CreateFromOBJ("Enemy");
+
 	modelSkydome_ = Model::CreateFromOBJ("skydome", true); 
 
 	Vector3 playerPosition = mapChipField_->GetMapChipPositionByIndex(1,18);
@@ -51,6 +54,14 @@ void GameScene::Intialize() {
 
 	player_->SetMapChipField(mapChipField_);
 
+	Vector3 enemyPosition = mapChipField_->GetMapChipPositionByIndex(15, 18);
+
+	enemy_ = new Enemy();
+
+	enemy_->Initialize(modelEnemy_, &camera_, enemyPosition);
+
+	enemy_->SetMapChipField(mapChipField_);
+
 	GenerateBlocks();
 
 	skydome_->Initialize(modelSkydome_, textureHandle_, &camera_);
@@ -70,6 +81,7 @@ void GameScene::Intialize() {
 void GameScene::Update() 
 {
 	player_->Update();
+	enemy_->Updata();
 	skydome_->Update();
 	debugCamera_->Update();
 	cameraController_->Update();
@@ -126,6 +138,15 @@ void GameScene::Draw()
 	{
 		for (WorldTransform* worldTransformBlock : worldTransformBlockLine) 
 		{
+			if (!worldTransformBlock)
+				continue;
+			modelBlock_->Draw(*worldTransformBlock, camera_);
+		}
+	}
+
+	enemy_->Draw();
+	for (std::vector<WorldTransform*>& worldTransformBlockLine : worldTransformBlocks_) {
+		for (WorldTransform* worldTransformBlock : worldTransformBlockLine) {
 			if (!worldTransformBlock)
 				continue;
 			modelBlock_->Draw(*worldTransformBlock, camera_);

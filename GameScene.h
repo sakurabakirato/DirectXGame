@@ -1,6 +1,7 @@
 #pragma once
 #include "MyMath.h"
 #include "Player.h"
+#include "Enemy.h"
 #include "SkyDome.h"
 #include <KamataEngine.h>
 #include <vector>
@@ -28,9 +29,13 @@ private:
 
 	KamataEngine::Model* modelPlayer_ = nullptr;
 
+	KamataEngine::Model* modelEnemy_ = nullptr;
+
 	KamataEngine::Camera camera_;
 
 	Player* player_ = nullptr;
+
+	Enemy* enemy_ = nullptr;
 	
 	SkyDome* skydome_ = nullptr;
 
