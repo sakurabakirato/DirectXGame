@@ -25,9 +25,18 @@ private:
 
 	MapChipField* mapChipField_ = nullptr;
 
-	static inline const float kWalkSpeed = 1.0f;
+	static inline const float kWalkSpeed = 0.01f;
 
 	KamataEngine::Vector3 velocity_ = {};
+
+	static inline const float kWalkMotionAngleStart = 0.0f;
+
+	static inline const float kWalkMotionAngleEnd = 5.0f;
+
+	static inline const float kWalkMotionTime = 1.0f;
+
+	float walkTimer_ = 0.0f;
+
 
 
 };
