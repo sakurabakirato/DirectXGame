@@ -8,7 +8,8 @@
 #include "MapChipField.h"
 #include "CameraController.h"
 
-class GameScene {
+class GameScene 
+{
 public:
 	~GameScene();
 	// 初期化
@@ -19,6 +20,8 @@ public:
 	void Draw();
 
 	void GenerateBlocks();
+
+	void CheckAllCollisions();
 
 private:
 	uint32_t textureHandle_ = 0;
@@ -35,7 +38,7 @@ private:
 
 	Player* player_ = nullptr;
 
-	Enemy* enemy_ = nullptr;
+	std::list<Enemy*> enemies_;
 	
 	SkyDome* skydome_ = nullptr;
 

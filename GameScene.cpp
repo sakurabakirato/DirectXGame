@@ -1,4 +1,5 @@
 #include "GameScene.h"
+#include "MyMath.h"
 
 using namespace KamataEngine;
 
@@ -7,7 +8,10 @@ GameScene::~GameScene()
 	// デストラクタ
 	delete model_;
 	delete player_;
-	delete enemy_;
+	for (Enemy* enemy : enemies_) 
+	{
+		delete enemy;
+	}
 	delete debugCamera_;
 	delete modelSkydome_;
 	delete mapChipField_;
@@ -54,13 +58,17 @@ void GameScene::Intialize() {
 
 	player_->SetMapChipField(mapChipField_);
 
-	Vector3 enemyPosition = mapChipField_->GetMapChipPositionByIndex(15, 18);
 
-	enemy_ = new Enemy();
+	for (int32_t i = 0; i < 2; ++i) 
+	{
+		Enemy* newEnemy = new Enemy();
 
-	enemy_->Initialize(modelEnemy_, &camera_, enemyPosition);
+		Vector3 enemyPosition = mapChipField_->GetMapChipPositionByIndex(14 + i * 2, 18);
 
-	enemy_->SetMapChipField(mapChipField_);
+		newEnemy->Initialize(modelEnemy_, &camera_, enemyPosition);
+
+		enemies_.push_back(newEnemy);
+	}
 
 	GenerateBlocks();
 
@@ -81,7 +89,10 @@ void GameScene::Intialize() {
 void GameScene::Update() 
 {
 	player_->Update();
-	enemy_->Updata();
+	for (Enemy* enemy : enemies_) 
+	{
+		enemy->Update();
+	}
 	skydome_->Update();
 	debugCamera_->Update();
 	cameraController_->Update();
@@ -125,6 +136,9 @@ void GameScene::Update()
 			worldTransformBlock->TransferMatrix();
 		}
 	}
+
+	CheckAllCollisions();
+
 }
 
 void GameScene::Draw() 
@@ -144,7 +158,10 @@ void GameScene::Draw()
 		}
 	}
 
-	enemy_->Draw();
+	for (Enemy* enemy : enemies_) 
+	{
+		enemy->Draw();
+	}
 	for (std::vector<WorldTransform*>& worldTransformBlockLine : worldTransformBlocks_) {
 		for (WorldTransform* worldTransformBlock : worldTransformBlockLine) {
 			if (!worldTransformBlock)
@@ -190,4 +207,31 @@ void GameScene::GenerateBlocks()
 			}
 		}
 	}
+}
+
+void GameScene::CheckAllCollisions() 
+{
+	// 判定対象1と2の座標
+	AABB aabb1, aabb2;
+
+#pragma region 自キャラと敵キャラの当たり判定
+	{
+		// 自キャラの座標
+		aabb1 = player_->GetAABB();
+
+		// 自キャラと敵弾全ての当たり判定
+		for (Enemy* enemy : enemies_) {
+			// 敵弾の座標
+			aabb2 = enemy->GetAABB();
+
+			// AABB同士の交差判定
+			if (IsCollision(aabb1, aabb2)) {
+				// 自キャラの衝突時コールバックを呼び出す
+				player_->OnCollision(enemy);
+				// 敵弾の衝突時コールバックを呼び出す
+				enemy->OnCollision(player_);
+			}
+		}
+	}
+#pragma endregion
 }

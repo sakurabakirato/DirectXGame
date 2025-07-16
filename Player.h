@@ -1,7 +1,11 @@
 #pragma once
 #include <KamataEngine.h>
+#include "MyMath.h"
+#include "Enemy.h"
+using namespace KamataEngine;
 
 class MapChipField;
+class Enemy;
 
 class Player {
 public:
@@ -66,6 +70,12 @@ public:
 
 	void CheckMapLanding(const CollisionMapInfo& info);
 
+	Vector3 GetWorldPosition();
+
+	AABB GetAABB();
+
+	void OnCollision(const Enemy* enemy);
+
 private:
 
 	KamataEngine::WorldTransform worldTransform_;
@@ -80,9 +90,9 @@ private:
 
 	static inline const float kAcceleration = 0.1f;
 
-	static inline const float kAttenuation = 0.1f;
+	static inline const float kAttenuation = 0.05f;
 
-	static inline const float kLimitRunSpeed = 1.0f;
+	static inline const float kLimitRunSpeed = 0.3f;
 
 	LRDirection lrDirection_ = LRDirection::kRight;
 
@@ -94,11 +104,11 @@ private:
 
 	bool onGround_ = true;
 
-	static inline const float kGravityAcceleration = 0.1f;
+	static inline const float kGravityAcceleration = 0.98f;
 
-	static inline const float kLimitFallSpeed = 1.0f;
+	static inline const float kLimitFallSpeed = 0.5f;
 
-	static inline const float kJumpAccleration = 1.0f;
+	static inline const float kJumpAccleration = 20.0f;
 
 	MapChipField* mapChipField_ = nullptr;
 
@@ -107,8 +117,8 @@ private:
 
 	static inline const float kBlank = 1.0f;
 
-	static inline const float kAttenuationLanding = 0.5f;
-	static inline const float kGroundSearchHeight = 0.1f;
-	static inline const float kAttenuationWall = 0.5f;
+	static inline const float kAttenuationLanding = 0.0f;
+	static inline const float kGroundSearchHeight = 0.06f;
+	static inline const float kAttenuationWall = 0.2f;
 
 };
