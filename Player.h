@@ -108,7 +108,7 @@ private:
 
 	static inline const float kLimitFallSpeed = 0.5f;
 
-	static inline const float kJumpAccleration = 20.0f;
+	static inline const float kJumpAccleration = 1.0f;
 
 	MapChipField* mapChipField_ = nullptr;
 
