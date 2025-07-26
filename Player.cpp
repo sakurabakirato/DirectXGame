@@ -432,7 +432,7 @@ void Player::CheckMapCollisionLeft(CollisionMapInfo& info)
 	MapChipField::IndexSet indexSet;
 	indexSet = mapChipField_->GetMapChipIndexSetByPosition(positionsNew[kLeftTop]);
 	mapChipType = mapChipField_->GetMapChipTypeByIndex(indexSet.xIndex, indexSet.yindex);
-	mapChipTypeNext = mapChipField_->GetMapChipTypeByIndex(indexSet.xIndex - 1, indexSet.yindex);
+	mapChipTypeNext = mapChipField_->GetMapChipTypeByIndex(indexSet.xIndex + 1, indexSet.yindex);
 	// 隣接セルがともにブロックであればヒット
 	if (mapChipType == MapChipType::kBlock && mapChipTypeNext != MapChipType::kBlock) 
 	{
