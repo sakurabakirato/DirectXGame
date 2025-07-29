@@ -1,60 +1,98 @@
 #pragma once
-#include "MyMath.h"
-#include "Player.h"
-#include "Enemy.h"
-#include "SkyDome.h"
-#include <KamataEngine.h>
-#include <vector>
-#include "MapChipField.h"
 #include "CameraController.h"
+#include "DeathParticles.h"
+#include "Enemy.h"
+#include "MapChipField.h"
+#include "Player.h"
+#include "Skydome.h"
+#include <KamataEngine.h>
 
-class GameScene 
-{
+using namespace KamataEngine;
+
+// ゲームシーン
+class GameScene {
 public:
-	~GameScene();
 	// 初期化
-	void Intialize();
+	void Initialize();
+
 	// 更新
 	void Update();
+
 	// 描画
 	void Draw();
 
+	~GameScene();
+
 	void GenerateBlocks();
 
+	// 02_10 16枚目 衝突判定と応答
 	void CheckAllCollisions();
 
+	// 02_12 9枚目
+	void ChangePhase();
+
+	// 02_12 26枚目	デスフラグのgetter
+	bool IsFinished() const { return finished_; }
+
 private:
+	enum class Phase {
+		kPlay, // ゲームプレイ
+		kDeath // デス演出
+	};
+
+	// 02_12 4枚目 ゲームの現在フェーズ（変数）
+	Phase phase_;
+
+	////テクスチャーハンドル
 	uint32_t textureHandle_ = 0;
 
-	KamataEngine::Model* model_ = nullptr;
+	Sprite* sprite_ = nullptr;
 
-	KamataEngine::Model* modelBlock_ = nullptr;
+	//////3Dモデル
+	Model* model_ = nullptr;
 
-	KamataEngine::Model* modelPlayer_ = nullptr;
+	// ブロックの3Dモデル
+	Model* blockModel_ = nullptr;
 
-	KamataEngine::Model* modelEnemy_ = nullptr;
+	WorldTransform worldTransform_;
 
-	KamataEngine::Camera camera_;
+	////カメラ
+	Camera camera_;
 
+	std::vector<std::vector<WorldTransform*>> worldTransformBlocks_;
+
+	DebugCamera* debugCamera_ = nullptr;
+
+	// 自キャラ
 	Player* player_ = nullptr;
 
-	std::list<Enemy*> enemies_;
-	
-	SkyDome* skydome_ = nullptr;
+	// 02_09 10枚目 エネミークラス
+	Enemy* enemy_ = nullptr;
 
-	CameraController* cameraController_ = nullptr;
+	// Math* math_ = nullptr;
 
-	KamataEngine::Model* modelSkydome_ = nullptr;
-
-	std::vector<std::vector<KamataEngine::WorldTransform*>> worldTransformBlocks_;
-
-	// デバックカメラ有効
+	// デバッグカメラ有効
 	bool isDebugCameraActive_ = false;
 
-	// デバックカメラ
-	KamataEngine::DebugCamera* debugCamera_ = nullptr;
+	Skydome* skydome_ = nullptr;
 
-	//マップチップフィールド
+	Model* modelSkydome_ = nullptr;
+
+	Model* modelPlayer_ = nullptr;
+
+	Model* enemy_model_ = nullptr;
+
 	MapChipField* mapChipField_;
 
+	CameraController* CController_ = nullptr;
+
+	std::list<Enemy*> enemies_;
+
+	DeathParticles* deathParticles_ = nullptr;
+
+	// 02_11 16枚目
+	Model* deathParticle_model_ = nullptr;
+
+	// 02_12 26枚目
+	bool finished_ = false;
 };

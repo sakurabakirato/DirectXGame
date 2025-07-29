@@ -1,53 +1,63 @@
 #include "Enemy.h"
-#include "MyMath.h"
 #include "MapChipField.h"
-#include "cassert"
+#include "Math.h"
+#include "UpData.h"
 #include <algorithm>
+#include <cassert>
 #include <numbers>
-#include "Player.h"
 
 using namespace KamataEngine;
-using namespace MathUtility;
 
+void Enemy::Initialize(Model* model, Camera* camera, const Vector3& position) {
 
-void Enemy::Initialize(KamataEngine::Model* model, KamataEngine::Camera* camera, const KamataEngine::Vector3& position) 
-{
 	assert(model);
 
+	// 02_09 7枚目
 	model_ = model;
-
+	// 02_09 7枚目
+	camera_ = camera;
+	// 02_09 7枚目
 	worldTransform_.Initialize();
 	worldTransform_.translation_ = position;
+	// 02_09 7枚目 角度調整
+	worldTransform_.rotation_.y = std::numbers::pi_v<float> * 3.0f / 2.0f;
 
-	camera_ = camera;
-
-	worldTransform_.rotation_.y = std::numbers::pi_v<float> / -2.0f;
-
+	// 02_09 16枚目
 	velocity_ = {-kWalkSpeed, 0, 0};
-
-	walkTimer_ = 0.0f;
+	// 02_09 20枚目
+	walkTimer = 0.0f;
 }
 
-void Enemy::Update() 
-{
+// 02_09 スライド5枚目
+void Enemy::UpDate() {
+
+	// 02_09 16枚目 移動
 	worldTransform_.translation_ += velocity_;
 
-	walkTimer_ += 1.0f / 60.0f;
+	// 02_09 20枚目
+	walkTimer += 1.0f / 60.0f;
 
-	worldTransform_.rotation_.x = std::sin(std::numbers::pi_v<float> * 2.0f * walkTimer_ / kWalkMotionTime);
+	// 02_09 23枚目 回転アニメーション
+	// worldTransform_.rotation_.x = std::sin(std::numbers::pi_v<float> * 2.0f * walkTimer / kWalkMotionTime);
 
-	worldTransform_.matWorld_ = MakeAffineMatrix(worldTransform_.scale_, worldTransform_.rotation_, worldTransform_.translation_);
+	float param = std::sin(std::numbers::pi_v<float> * 2.0f * walkTimer / kWalkMotionTime);
 
-	worldTransform_.TransferMatrix();
+	float degree = kWalkMotionAngleStart + kWalkMotionAngleEnd * (param + 1.0f) / 2.0f;
+
+	worldTransform_.rotation_.x = degree * (std::numbers::pi_v<float> / 180.0f);
+
+	// 02_09 スライド8枚目 ワールド行列更新
+	upData->WorldTransformUpData(worldTransform_);
 }
 
-void Enemy::Draw() 
-{ 
-	model_->Draw(worldTransform_, *camera_); 
+// 02_09 スライド5枚目
+void Enemy::Draw() {
+	// 02_09 スライド9枚目  モデル描画
+	model_->Draw(worldTransform_, *camera_);
 }
 
-AABB Enemy::GetAABB() 
-{
+// 02_10 スライド14枚目
+AABB Enemy::GetAABB() {
 
 	Vector3 worldPos = GetWorldPosition();
 
@@ -72,7 +82,5 @@ Vector3 Enemy::GetWorldPosition() {
 	return worldPos;
 }
 
-void Enemy::OnCollision(const Player* player) 
-{ 
-	(void)player;
-}
+// 02_10 スライド20枚目
+void Enemy::OnCollision(const Player* player) { (void)player; }
