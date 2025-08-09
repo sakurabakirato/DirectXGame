@@ -7,7 +7,7 @@ void Fade::Initialize() {
 	sprite_ = Sprite::Create(0, Vector2{});
 
 	sprite_->SetSize(Vector2(WinApp::kWindowWidth, WinApp::kWindowHeight));
-	sprite_->SetColor(Vector4(0, 0, 0, 1.f));
+	sprite_->SetColor(Vector4(0, 0, 0, 1.0f));
 }
 
 void Fade::Update() {
@@ -27,7 +27,7 @@ void Fade::Update() {
 			counter_ = duration_;
 		}
 		// 0.0fから1.0fの間で、経過時間がフェード継続時間に近づくほどアルファ値を大きくする
-		sprite_->SetColor(Vector4(0, 0, 0, std::clamp(1.0f - counter_ / duration_, 0.0f, 1.0f)));
+		sprite_->SetColor(Vector4(0, 0, 0, 1.0f - std::clamp(counter_ / duration_, 0.0f, 1.0f)));
 
 		break;
 	case Status::FadeOut:
@@ -77,15 +77,15 @@ bool Fade::IsFinished() const {
 	case Status::FadeIn:
 	case Status::FadeOut:
 
-		/*  if (counter_ >= duration_) {
-		      //return true;
-		  //}
-		  //else {
-		      //return false;
-		  //}*/
+		  if (counter_ >= duration_) {
+		      return true;
+		  }
+		  else {
+		      return false;
+		  }
 
-		// 1行バージョン 3項演算子
-		return (counter_ >= duration_) ? true : false;
+		//// 1行バージョン 3項演算子
+		//return (counter_ >= duration_) ? true : false;
 	}
 
 	return true;

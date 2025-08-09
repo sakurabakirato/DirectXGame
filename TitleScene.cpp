@@ -2,12 +2,15 @@
 #include "Math.h"
 #include <numbers>
 
-TitleScene::~TitleScene() {
+TitleScene::~TitleScene() 
+{
 	delete modelPlayer_;
 	delete modelTitle_;
+	delete fade_;
 }
 
-void TitleScene::Initialize() {
+void TitleScene::Initialize() 
+{
 
 	modelTitle_ = Model::CreateFromOBJ("titleFont", true);
 	modelPlayer_ = Model::CreateFromOBJ("player");
@@ -32,13 +35,36 @@ void TitleScene::Initialize() {
 	worldTransformPlayer_.translation_.x = -2.0f;
 
 	worldTransformPlayer_.translation_.y = -10.0f;
+
+	fade_ = new Fade();
+	fade_->Initialize();
+	fade_->Start(Fade::Status::FadeIn, 1.0f);
 }
 
-void TitleScene::Update() {
-
-	// 02_12 27枚目
-	if (Input::GetInstance()->PushKey(DIK_SPACE)) {
-		finished_ = true;
+void TitleScene::Update() 
+{
+	switch (phase_) 
+	{
+	case Phase::kMain:
+		if (Input::GetInstance()->PushKey(DIK_SPACE)) 
+		{
+			phase_ = Phase::kFadeOut;
+			fade_->Start(Fade::Status::FadeOut, 1.0f);
+		}
+		break;
+	case Phase::kFadeIn:
+		fade_->Update();
+		if (fade_->IsFinished()) 
+		{
+			phase_ = Phase::kMain;
+		}
+		break;
+	case Phase::kFadeOut:
+		fade_->Update();
+		if (fade_->IsFinished()) 
+		{
+			finished_ = true;
+		}
 	}
 
 	counter_ += 1.0f / 60.0f;
@@ -56,7 +82,8 @@ void TitleScene::Update() {
 	upData->WorldTransformUpData(worldTransformPlayer_);
 }
 
-void TitleScene::Draw() {
+void TitleScene::Draw() 
+{
 
 	DirectXCommon* dxCommon_ = DirectXCommon::GetInstance();
 	// コマンドリストの取得
@@ -68,4 +95,5 @@ void TitleScene::Draw() {
 	modelPlayer_->Draw(worldTransformPlayer_, camera_);
 
 	Model::PostDraw();
+	fade_->Draw();
 }

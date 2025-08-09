@@ -5,6 +5,7 @@
 #include "MapChipField.h"
 #include "Player.h"
 #include "Skydome.h"
+#include "Fade.h"
 #include <KamataEngine.h>
 
 using namespace KamataEngine;
@@ -36,8 +37,10 @@ public:
 
 private:
 	enum class Phase {
+		kFadeIn,
 		kPlay, // ゲームプレイ
-		kDeath // デス演出
+		kDeath, // デス演出
+		kFadeOut,
 	};
 
 	// 02_12 4枚目 ゲームの現在フェーズ（変数）
@@ -95,4 +98,6 @@ private:
 
 	// 02_12 26枚目
 	bool finished_ = false;
+
+	Fade* fade_ = nullptr;
 };
